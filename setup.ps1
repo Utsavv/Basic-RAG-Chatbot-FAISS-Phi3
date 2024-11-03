@@ -21,7 +21,7 @@ if ($envExists) {
     Write-Output "Environment '$envName' already exists."
 } else {
     Write-Output "Creating environment '$envName'..."
-    conda create -n $envName python=3.13 -y
+    conda create -n $envName python=3.12 -y
 }
 
 # Activate the environment
@@ -37,5 +37,13 @@ conda install -c pytorch faiss-cpu=1.9.0
 # GPU(+CPU) version with NVIDIA RAFT
 
 #Install dependencies required for Tunning Phi 3.5
-pip install onnxruntime fastapi uvicorn
-pip install -q faiss-cpu flask transformers torch
+# Install ONNX Runtime, FastAPI, and Uvicorn
+pip install onnxruntime
+conda install -c conda-forge fastapi uvicorn
+
+# Install Faiss (CPU version), Flask, Transformers, and Torch (PyTorch)
+conda install -c conda-forge faiss-cpu flask transformers pytorch
+
+# Install Hugging Face Tokenizers
+git lfs install
+git clone https://huggingface.co/microsoft/Phi-3.5-mini-instruct-onnx
