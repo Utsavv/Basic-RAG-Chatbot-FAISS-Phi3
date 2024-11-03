@@ -1,28 +1,35 @@
-import onnxruntime as ort
-from transformers import AutoTokenizer
 
-# Load the tokenizer from a local directory
-tokenizer = AutoTokenizer.from_pretrained(r".\Phi-3.5-mini-instruct-onnx\cpu_and_mobile\cpu-int4-awq-block-128-acc-level-4")
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
 
-# Load the ONNX model
-session = ort.InferenceSession(r".\Phi-3.5-mini-instruct-onnx\cpu_and_mobile\cpu-int4-awq-block-128-acc-level-4\phi-3.5-mini-instruct-cpu-int4-awq-block-128-acc-level-4.onnx")
+torch.random.manual_seed(0)
 
-# Define the input text
-input_text = "What is the golden ratio?"
+model = AutoModelForCausalLM.from_pretrained(
+    "microsoft/Phi-3-mini-4k-instruct", 
+    device_map="cuda", 
+    torch_dtype="auto", 
+    trust_remote_code=True, 
+)
+tokenizer = AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-4k-instruct")
 
-# Tokenize the input
-inputs = tokenizer(input_text, return_tensors="np")
+messages = [
+    {"role": "system", "content": "Your are a python developer."},
+    {"role": "user", "content": "Help me generate a bubble algorithm"},
+]
 
-# Prepare the inputs for the model
-input_feed = {
-    "input_ids": inputs["input_ids"],
-    "attention_mask": inputs["attention_mask"]
+pipe = pipeline(
+    "text-generation",
+    model=model,
+    tokenizer=tokenizer,
+)
+
+generation_args = {
+    "max_new_tokens": 600,
+    "return_full_text": False,
+    "temperature": 0.3,
+    "do_sample": False,
 }
 
-# Run inference
-outputs = session.run(None, input_feed)
+output = pipe(messages, **generation_args)
+print(output[0]['generated_text'])
 
-# Decode the output
-output_text = tokenizer.decode(outputs[0][0], skip_special_tokens=True)
-
-print(output_text)
