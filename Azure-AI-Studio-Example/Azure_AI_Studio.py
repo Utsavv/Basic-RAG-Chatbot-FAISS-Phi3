@@ -4,9 +4,6 @@ from azure.ai.inference import ChatCompletionsClient
 from azure.core.credentials import AzureKeyCredential
 from threading import Lock
 
-# Load environment variables from a .env file
-#load_dotenv()
-
 API_KEY = os.getenv('AZURE_OPENAI_API_KEY')  # Use environment variable for security
 ENDPOINT = os.getenv('AZURE_OPENAI_ENDPOINT')  # Use environment variable for security
 

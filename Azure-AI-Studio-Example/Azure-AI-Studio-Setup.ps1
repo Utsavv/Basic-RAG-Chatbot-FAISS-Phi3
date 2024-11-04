@@ -10,10 +10,6 @@
 
 # Define the environment name
 $envName = "BasicRAGChatBotPhi"
-# Define the environment variables
-$apiKey = "YOUR_API_KEY"
-$endpoint = "https://resource-Project.location.models.ai.azure.com"
-
 #In case if you want to delete env
 #conda deactivate
 #conda env remove --name BasicRAGChatBotPhi
@@ -47,8 +43,9 @@ if ($currentEnv -ne $envName) {
     exit 1
 }
 
-# CPU-only version
-
+# CPU-only version of FAISS
+conda install pytorch::faiss-cpu
+conda install conda-forge::sentence-transformers
 pip install openai
 pip install transformers
 pip install python-dotenv
