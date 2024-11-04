@@ -41,7 +41,7 @@ def send_query_to_azure(query: str):
             "messages": [
                 {
                     "role": "user",
-                    "content": "Please summarize following " + query
+                    "content": "Please summarize following :" + query
                 }
             ],
             "max_tokens": 2048,
