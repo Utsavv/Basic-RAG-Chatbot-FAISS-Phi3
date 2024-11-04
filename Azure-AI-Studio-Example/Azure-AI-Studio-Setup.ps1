@@ -48,15 +48,11 @@ if ($currentEnv -ne $envName) {
 }
 
 # CPU-only version
-y
+
 pip install openai
 pip install transformers
 pip install python-dotenv
 pip install azure-ai-inference
-# Set the environment variables
-[System.Environment]::SetEnvironmentVariable("AZURE_OPENAI_API_KEY", $apiKey, [System.EnvironmentVariableTarget]::User)
-[System.Environment]::SetEnvironmentVariable("AZURE_OPENAI_ENDPOINT", $endpoint, [System.EnvironmentVariableTarget]::User)
 
-# Verify that the environment variables are set
-Write-Output "AZURE_OPENAI_API_KEY is set to: $([System.Environment]::GetEnvironmentVariable('AZURE_OPENAI_API_KEY', [System.EnvironmentVariableTarget]::User))"
-Write-Output "AZURE_OPENAI_ENDPOINT is set to: $([System.Environment]::GetEnvironmentVariable('AZURE_OPENAI_ENDPOINT', [System.EnvironmentVariableTarget]::User))"
+# Set the environment variables
+#You can create 
