@@ -4,7 +4,7 @@ import numpy as np
 import onnxruntime as ort
 import os
 import os.path
-
+#TODO: https://github.com/microsoft/Phi-3CookBook/blob/main/md/02.QuickStart/Huggingface_QuickStart.md
 def get_seed():
     seed = os.getenv("RANDOM_SEED")
     return int(seed) if seed is not None else 0
