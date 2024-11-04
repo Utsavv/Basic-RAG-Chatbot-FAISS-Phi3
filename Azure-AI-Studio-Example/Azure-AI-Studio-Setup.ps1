@@ -52,7 +52,7 @@ y
 pip install openai
 pip install transformers
 pip install python-dotenv
-
+pip install azure-ai-inference
 # Set the environment variables
 [System.Environment]::SetEnvironmentVariable("AZURE_OPENAI_API_KEY", $apiKey, [System.EnvironmentVariableTarget]::User)
 [System.Environment]::SetEnvironmentVariable("AZURE_OPENAI_ENDPOINT", $endpoint, [System.EnvironmentVariableTarget]::User)

@@ -1,37 +1,44 @@
+# pip install azure-ai-inference
 import os
-from openai import AzureOpenAI
-#reference - https://github.com/Azure-Samples/openai/blob/main/Basic_Samples/Completions/basic_completions_example_sdk.ipynb
-# Set up your credentials here
-from dotenv import load_dotenv
+from azure.ai.inference import ChatCompletionsClient
+from azure.core.credentials import AzureKeyCredential
 
 # Load environment variables from a .env file
-load_dotenv()
+#load_dotenv()
 
-# API_KEY = os.environ["AZURE_OPENAI_API_KEY"]  # Use environment variable for security
-# ENDPOINT = os.environ["AZURE_OPENAI_ENDPOINT"]  # Use environment variable for security
-API_KEY = "ofJyD5hLMkSwXRsd6mxluP3heajkJOZY"
-ENDPOINT = "https://LLMUseCase-ChatBot.swedencentral.models.ai.azure.com"
-DEPLOYMENT_NAME = "LLMUseCase-ChatBot" #not the model name, but deployment name
-
-# Initialize the AzureOpenAI client with Azure-specific settings
-client = AzureOpenAI(
-    api_key=API_KEY,
-    azure_endpoint=ENDPOINT,  # Use 'base_url' instead of 'api_base'
-    api_version="2024-11-04"  # Ensure this matches your Azure OpenAI API version
+API_KEY = os.getenv("AZURE_OPENAI_API_KEY")  # Use environment variable for security
+ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")  # Use environment variable for security
+# API_KEY = "ofJyD5hLMkSwXRsd6mxluP3heajkJOZY"
+# ENDPOINT = "https://LLMUseCase-ChatBot.swedencentral.models.ai.azure.com"
+#DEPLOYMENT_NAME = "LLMUseCase-ChatBot" #not the model name, but deployment name
+# Define the headers for Azure authentication
+client = ChatCompletionsClient(
+    endpoint=ENDPOINT,
+    credential=AzureKeyCredential(API_KEY)
 )
 
-def send_query_to_azure(prompt: str):
+
+def send_query_to_azure(query: str):
     try:
-        # Call the Azure OpenAI API using the client
-        response = client.completions.create(
-            model=DEPLOYMENT_NAME,  # Use your model deployment name
-            prompt=prompt,
-            max_tokens=20
-        )
+        payload = {
+        "messages": [
+            {
+            "role": "user",
+            "content": "Please summarize following "+query
+            }
+        ],
+        "max_tokens": 2048,
+        "temperature": 0.8,
+        "top_p": 0.1,
+        "presence_penalty": 0,
+        "frequency_penalty": 0
+        }
+        response = client.complete(payload)
 
         # Extracting response text
-        result_text = response.choices[0].text.strip()
+        result_text = response.choices[0].message.content.strip()
         return result_text
+    
     except Exception as e:
         return f"Error occurred: {str(e)}"
 
